@@ -12,7 +12,7 @@ public class App
         root = new State(1);
         rootChildrenScoreAndState = new ArrayList<ScoreState>();
         AlphaBetaSolver abs = new AlphaBetaSolver(5, root);
-        System.out.println(abs.getBest().Str());
+        // System.out.println(abs.getBest().Str());
         // alphabetaminimax(Integer.MIN_VALUE, Integer.MAX_VALUE, 0, true, root);
         // for (ScoreState ss : rootChildrenScoreAndState) 
         // {

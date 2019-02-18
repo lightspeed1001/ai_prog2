@@ -32,4 +32,9 @@ public class State implements IState
     {
         return Integer.toString(val);
     }
+
+    @Override
+    public boolean GameOver() {
+        return false;
+    }
 }
