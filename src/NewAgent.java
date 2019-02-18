@@ -20,14 +20,11 @@ public class NewAgent implements Agent
         //TODO check if we are actually using width and height now
 		this.width = width;
 		this.height = height;
-        
         board = new Board(width, height);
-		if(role.equals("white"))
-		{
+		if(role.equals("white")) {
 			board.setWhiteAsMax(true);
 		}
-		else
-		{
+		else {
 			board.setWhiteAsMax(false);
 		}
     }
@@ -43,35 +40,25 @@ public class NewAgent implements Agent
     		} else {
     			roleOfLastPlayer = "black";
     		}
-            System.out.println(roleOfLastPlayer + " moved from " + x1 + "," + y1 + " to " + x2 + "," + y2);
             
-			// 1. update your internal world model according to the action that was just executed
 			System.out.println("====================");
+            System.out.println(roleOfLastPlayer + " moved from " + x1 + "," + y1 + " to " + x2 + "," + y2);
             board.MovePawn(x1, y1, x2, y2);
 			// System.out.println("Board score: " + board.Score());
-			board.PrintDetailedScore();
+			// board.PrintDetailedScore();
             board.print();
     	}
 		
     	// update turn (above that line it myTurn is still for the previous state)
 		myTurn = !myTurn;
 		if (myTurn) {
-			AlphaBetaSolver solver = new AlphaBetaSolver(15, board);
+			AlphaBetaSolver solver = new AlphaBetaSolver(10, board);
 			solver.Solve();
 			int bestNextState = solver.GetIndexofBestMove();
-			// System.out.println("The best next state is: ");
-			// System.out.println(bestNextState.Str());
-            // 2. run alpha-beta search to determine the best move
 			
 			LegalState bestMove = board.GetLegalMoves().get(bestNextState);
-			// System.out.println("(move " + (bestMove.x1+1) + " " + (bestMove.y1+1) + " " + (bestMove.x2+1) + " " + (bestMove.y2+1) + ")");
-			
-			//Kóðinn fyrir ofan færir peðið alltaf, óþarfi að gera hér
-			// board.MovePawn(bestMove.x1+1, bestMove.y1+1, bestMove.x2+1, bestMove.y2+1);
-			// board.print();
-			//DO NOT FORGET THE BRACKETS PLZ			vvvvvvvvvvv
-			return "(move " + (bestMove.x1+1) + " " + (bestMove.y1+1) + " " + (bestMove.x2+1) + " " + (bestMove.y2+1) + ")";
 
+			return "(move " + (bestMove.x1+1) + " " + (bestMove.y1+1) + " " + (bestMove.x2+1) + " " + (bestMove.y2+1) + ")";
 		} else {
 			return "noop";
 		}
@@ -80,6 +67,6 @@ public class NewAgent implements Agent
 	// is called when the game is over or the match is aborted
 	@Override
 	public void cleanup() {
-		// TODO: cleanup so that the agent is ready for the next match
+		//Not really needed? Init function takes care of this.
 	}
 }
