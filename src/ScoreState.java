@@ -1,14 +1,10 @@
-/**
- * ScoreState
- */
 public class ScoreState 
 {
     public IState state;
     public int score;
     public int childIndex;
     
-    public ScoreState(int score, IState state, int child)
-    {
+    public ScoreState(int score, IState state, int child) {
         this.score = score;
         this.state = state;
         this.childIndex = child;

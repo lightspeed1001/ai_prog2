@@ -1,4 +1,3 @@
-public enum CellState
-{
+public enum CellState {
     Empty, White, Black;
 }

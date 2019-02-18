@@ -33,7 +33,7 @@ public class Board implements IState {
         this.width = other.width;
         this.height = other.height;
         this.board = new CellState[width][height];
-        this.whiteTurn = !other.whiteTurn; //remember to flip! Maybe just do it here?
+        this.whiteTurn = !other.whiteTurn;
         this.maxIsWhite = other.maxIsWhite;
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
@@ -55,7 +55,6 @@ public class Board implements IState {
 
     public ArrayList<LegalState> GetLegalMoves() {
         CellState cell;
-        int x1, y1, x2, y2;
         LegalState temp;
         LegalMovesWhite = new ArrayList<LegalState>();
         LegalMovesBlack = new ArrayList<LegalState>();
@@ -183,6 +182,7 @@ public class Board implements IState {
         else return LegalMovesBlack;
     }
 
+    //Aldrei notað
     public int calcScore(int x1, int y1, int x2, int y2) {
         // or check the whole board to see if the game has been won or a draw
         int score = 0;
@@ -205,10 +205,8 @@ public class Board implements IState {
             if (cell2 == CellState.Black) {
                 score += 30;
             }
-
             score += (y2 * 10);
         }
-
         return score;
     }
 
@@ -253,7 +251,7 @@ public class Board implements IState {
                 return false;
             }
         }
-        return false; //VSCode var að kvarta, bætti þessu við.
+        return false;
     }
 
     public void print() {
@@ -277,19 +275,21 @@ public class Board implements IState {
         }
     }
 
+    //The score a winning state is worth
+    private int WinningScore( ){
+        return (width * height * 100);
+    }
+
     //Returns -100 if max lost, 100 if max wins, 0 otherwise
-    public int IsGameOver()
-    {
-        for (int i = 0; i < width; i++) 
-        {
-            if(board[i][0] == CellState.Black) return maxIsWhite ? -100 : 100; //White loses
-            else if(board[i][height-1] == CellState.White) return maxIsWhite ? 100 : -100; //Black loses
+    public int IsGameOver() {
+        for (int i = 0; i < width; i++) {
+            if(board[i][0] == CellState.Black) return maxIsWhite ? -(WinningScore()) : (WinningScore()); //White loses
+            else if(board[i][height-1] == CellState.White) return maxIsWhite ? (WinningScore()) : -(WinningScore()); //Black loses
         }
         return 0;
     }
 
-    public int FurthestWhitePawn()
-    {
+    public int FurthestWhitePawn() {
         int indexofFurthest = 0;
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
@@ -301,58 +301,51 @@ public class Board implements IState {
         return indexofFurthest + 1;
     }
 
-    public int FurthestBlackPawn()
-    {
+    public int FurthestBlackPawn() {
         int indexofFurthest = height;
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
                 CellState c = board[i][j];
-                if(c == CellState.Black && j < indexofFurthest)
-                {
+                if(c == CellState.Black && j < indexofFurthest) {
                     indexofFurthest = j;
                 }
             }
         }
-        // System.out.println("Indexof furthest black pawn: " + indexofFurthest);
         return height - indexofFurthest;
     }
 
-    public void setWhiteAsMax(boolean white)
-    {
+    public void setWhiteAsMax(boolean white) {
         this.maxIsWhite = white;
     }
 
-    public boolean isMaxWhite()
-    {
+    public boolean isMaxWhite() {
         return this.maxIsWhite;
     }
 
-    
     public void setWhiteTurn(boolean whiteTurn) {
         this.whiteTurn = whiteTurn;
     }
 
-    public boolean getWhiteTurn()
-    {
+    public boolean getWhiteTurn() {
         return this.whiteTurn;
     }
 
-    public void PrintDetailedScore()
-    {
+    //Debug function
+    public void PrintDetailedScore() {
         int whiteScore = FurthestWhitePawn(), blackScore = FurthestBlackPawn(), winner = IsGameOver();
         System.out.println("State and score:");
         System.out.println(Str());
         System.out.println(whiteScore + " - " + blackScore);
         if(winner != 0) 
-        System.out.println("Winneroo: " + (winner == 100 ? "white" : "black"));
-        else
-        {
+            System.out.println("Winneroo: " + (winner == 100 ? "white" : "black"));
+        else {
             if(maxIsWhite)
                 System.out.println("white-black: " + (whiteScore - blackScore));
             else
                 System.out.println("black-white: " + (blackScore - whiteScore));
         }
     }
+
     //IState implementation
     @Override
     public boolean GameOver() {
@@ -368,14 +361,14 @@ public class Board implements IState {
             for (int i = 0; i < width; i++) {
                 CellState c = board[i][j];
                 switch (c) {
-                case White:
-                    str += "W ";
-                    break;
-                case Black:
-                    str += "B ";
-                    break;
-                default:
-                    str += ". ";
+                    case White:
+                        str += "W ";
+                        break;
+                    case Black:
+                        str += "B ";
+                        break;
+                    default:
+                        str += ". ";
                 }
             }
             str += "]\n";
@@ -384,18 +377,11 @@ public class Board implements IState {
     }
 
     @Override
-    public int Score() 
-    {
-        //Return/calculate the score for this particular state.
+    public int Score() {
         int whiteScore = FurthestWhitePawn(), blackScore = FurthestBlackPawn(), winner = IsGameOver();
-        // System.out.println("State and score:");
-        // System.out.println(Str());
-        // System.out.println(whiteScore + " - " + blackScore);
-
         if(winner != 0) 
             return winner;
-        else
-        {
+        else {
             if(maxIsWhite)
                 return whiteScore - blackScore;
             else
@@ -408,8 +394,7 @@ public class Board implements IState {
         //Find and return all successor states.
         List<LegalState> moves = GetLegalMoves();
         List<IState> successors = new ArrayList<IState>();
-        for (LegalState move : moves) 
-        {
+        for (LegalState move : moves) {
             Board other = new Board(this);
             other.MovePawn(move.x1 + 1, move.y1 + 1, move.x2 + 1, move.y2 + 1); //the moves are already 0 based in here
             successors.add(other);
