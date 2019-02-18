@@ -47,7 +47,9 @@ public class NewAgent implements Agent
     	// update turn (above that line it myTurn is still for the previous state)
 		myTurn = !myTurn;
 		if (myTurn) {
-			// TODO: 2. run alpha-beta search to determine the best move
+            //AlphaBetaSolver solver = new AlphaBetaSolver();
+            
+            // TODO: 2. run alpha-beta search to determine the best move
 
 			// Here we just construct a random move (that will most likely not even be possible),
             // this needs to be replaced with the actual best move.
