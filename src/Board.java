@@ -182,34 +182,6 @@ public class Board implements IState {
         else return LegalMovesBlack;
     }
 
-    //Aldrei notað
-    public int calcScore(int x1, int y1, int x2, int y2) {
-        // or check the whole board to see if the game has been won or a draw
-        int score = 0;
-        CellState cell, cell2;
-        cell = board[x1][y1];
-        cell2 = board[x2][y2]; 
-        if (cell == CellState.Black) {
-            if(y1 == 1 && y2 == 0){
-                return 99;
-            }
-            if (cell2 == CellState.White) {
-                score += 30;
-            }
-
-            score += (height - y2) * 10;
-        } else {
-            if (y2 == height - 1) {
-                return 100;
-            }
-            if (cell2 == CellState.Black) {
-                score += 30;
-            }
-            score += (y2 * 10);
-        }
-        return score;
-    }
-
     public boolean LegalMove(boolean whiteTurn, int x1, int y1, int x2, int y2) 
     {
 
@@ -295,6 +267,7 @@ public class Board implements IState {
                     indexofFurthest = j;
             }
         }
+        if(indexofFurthest == height-1){ return 100; }
         return (indexofFurthest * 20) + 1;
     }
 
@@ -308,6 +281,7 @@ public class Board implements IState {
                 }
             }
         }
+        if(indexofFurthest == 0){ return 100; }
 
         // System.out.println("Indexof furthest black pawn: " + indexofFurthest);
         return (height - indexofFurthest) * 10;
