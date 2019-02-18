@@ -16,10 +16,11 @@ public class NewAgent implements Agent
     public void init(String role, int width, int height, int playclock) {
 		this.role = role;
 		this.playclock = playclock;
-		myTurn = !role.equals("white");
+        myTurn = !role.equals("white");
+        //TODO check if we are actually using width and height now
 		this.width = width;
 		this.height = height;
-        // TODO: add your own initialization code here
+        
         board = new Board(width, height);
 		if(role.equals("white"))
 		{
@@ -44,7 +45,7 @@ public class NewAgent implements Agent
     		}
             System.out.println(roleOfLastPlayer + " moved from " + x1 + "," + y1 + " to " + x2 + "," + y2);
             
-			// TODO: 1. update your internal world model according to the action that was just executed
+			// 1. update your internal world model according to the action that was just executed
 			System.out.println("====================");
             board.MovePawn(x1, y1, x2, y2);
 			// System.out.println("Board score: " + board.Score());
@@ -60,7 +61,7 @@ public class NewAgent implements Agent
 			int bestNextState = solver.GetIndexofBestMove();
 			// System.out.println("The best next state is: ");
 			// System.out.println(bestNextState.Str());
-            // TODO: 2. run alpha-beta search to determine the best move
+            // 2. run alpha-beta search to determine the best move
 			
 			LegalState bestMove = board.GetLegalMoves().get(bestNextState);
 			// System.out.println("(move " + (bestMove.x1+1) + " " + (bestMove.y1+1) + " " + (bestMove.x2+1) + " " + (bestMove.y2+1) + ")");
@@ -71,24 +72,6 @@ public class NewAgent implements Agent
 			//DO NOT FORGET THE BRACKETS PLZ			vvvvvvvvvvv
 			return "(move " + (bestMove.x1+1) + " " + (bestMove.y1+1) + " " + (bestMove.x2+1) + " " + (bestMove.y2+1) + ")";
 
-			// Here we just construct a random move (that will most likely not even be possible),
-            // this needs to be replaced with the actual best move.
-            // int x1,y1,x2,y2;
-            // do{
-            //     x1 = random.nextInt(width)+1;
-            //     x2 = x1 + random.nextInt(3)-1;
-            //     if (role.equals("white")) {
-            //         y1 = random.nextInt(height-1);
-            //         y2 = y1 + 1;
-            //     } else {
-            //         y1 = random.nextInt(height-1);
-            //         y2 = y1 - 1;
-            //     }
-			// }while(board.LegalMove(myTurn, x1, y1, x2, y2) == false);
-			
-            // board.MovePawn(x1, y1, x2, y2);
-            // board.print();
-			// return "(move " + x1+1 + " " + y1+1 + " " + x2+1 + " " + y2+1 + ")";
 		} else {
 			return "noop";
 		}

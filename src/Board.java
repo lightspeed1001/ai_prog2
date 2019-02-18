@@ -183,15 +183,15 @@ public class Board implements IState {
         else return LegalMovesBlack;
     }
 
-    public int calcScore(int x1, int y1, int x2, int y2) {
-        // or check the whole board to see if the game has been won or a draw
+    public int calcScore(int x1, int y1, int x2, int y2) 
+    {
         int score = 0;
         CellState cell, cell2;
         cell = board[x1][y1];
-        cell2 = board[x2][y2];
+        cell2 = board[x2][y2]; 
         if (cell == CellState.Black) {
-            if (y2 == 0) {
-                return 100;
+            if(y1 == 1 && y2 == 0){
+                return 99;
             }
             if (cell2 == CellState.White) {
                 score += 30;
@@ -212,11 +212,8 @@ public class Board implements IState {
         return score;
     }
 
-    public boolean LegalMove(boolean whiteTurn, int x1, int y1, int x2, int y2) {
-
-        if (x1 >= width || x2 >= width || y1 >= height || y2 >= height) {
-            return false;
-        }
+    public boolean LegalMove(boolean whiteTurn, int x1, int y1, int x2, int y2) 
+    {
 
         CellState cell = board[x1][y1];
         CellState cell2 = board[x2][y2];
@@ -253,7 +250,7 @@ public class Board implements IState {
                 return false;
             }
         }
-        return false; //VSCode var að kvarta, bætti þessu við.
+        return false;
     }
 
     public void print() {
@@ -298,7 +295,7 @@ public class Board implements IState {
                     indexofFurthest = j;
             }
         }
-        return indexofFurthest + 1;
+        return (indexofFurthest * 20) + 1;
     }
 
     public int FurthestBlackPawn()
@@ -314,7 +311,7 @@ public class Board implements IState {
             }
         }
         // System.out.println("Indexof furthest black pawn: " + indexofFurthest);
-        return height - indexofFurthest;
+        return (height - indexofFurthest) * 10;
     }
 
     public void setWhiteAsMax(boolean white)
