@@ -115,33 +115,6 @@ public class Board implements IState {
                         // do nothing
                     }
                 } 
-                // else if (i == 0) {
-                //     //only check i + 1 for diag
-                //     switch (cell) {
-                //         case White:
-                //             if (board[i + 1][j + 1] == CellState.Black) {
-                //                 temp = new LegalState(i, j, i + 1, j + 1);
-                //                 LegalMovesWhite.add(temp);
-                //             }
-                //             if (board[i][j + 1] == CellState.Empty) {
-                //                 temp = new LegalState(i, j, i, j + 1);
-                //                 LegalMovesWhite.add(temp);
-                //             }
-                //             break;
-                //         case Black:
-                //             if (board[i + 1][j - 1] == CellState.White) {
-                //                 temp = new LegalState(i, j, i + 1, j - 1);
-                //                 LegalMovesBlack.add(temp);
-                //             }
-                //             if (board[i][j - 1] == CellState.Empty) {
-                //                 temp = new LegalState(i, j, i, j - 1);
-                //                 LegalMovesBlack.add(temp);
-                //             }
-                //             break;
-                //         default:
-                //             break;
-                //     }
-                // } 
                 else {
                     // check both for diagonal
                     switch (cell) {
@@ -184,9 +157,7 @@ public class Board implements IState {
         else return LegalMovesBlack;
     }
 
-    public boolean LegalMove(boolean whiteTurn, int x1, int y1, int x2, int y2) 
-    {
-
+    public boolean LegalMove(boolean whiteTurn, int x1, int y1, int x2, int y2) {
         CellState cell = board[x1][y1];
         CellState cell2 = board[x2][y2];
         if (cell == CellState.Empty) {
@@ -283,9 +254,8 @@ public class Board implements IState {
                 }
             }
         }
-        if(indexofFurthest == 0) { return 100; }
+        if(indexofFurthest == 0) return 100;
 
-        // System.out.println("Indexof furthest black pawn: " + indexofFurthest);
         return (height - indexofFurthest) * 10;
 
     }

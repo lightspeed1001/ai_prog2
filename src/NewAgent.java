@@ -1,15 +1,18 @@
-import java.util.ArrayList;
-import java.util.Random;
+import javax.sound.midi.SysexMessage;
 
 public class NewAgent implements Agent
 {
-    private Random random = new Random();
-
 	private String role; // the name of this agent's role (white or black)
 	private int playclock; // this is how much time (in seconds) we have before nextAction needs to return a move
 	private boolean myTurn; // whether it is this agent's turn or not
     private Board board;
+	private float maxTime; // timeout setting from the gameplayer
+
+	private int maxDepth = 9; //Change this to make the search tree go deeper/shallower	
+
+	//Statistics
 	private long start;
+	private int numMoves;
 
 	/*
 		init(String role, int playclock) is called once before you have to select the first action. Use it to initialize the agent. role is either "white" or "black" and playclock is the number of seconds after which nextAction must return.
@@ -17,14 +20,18 @@ public class NewAgent implements Agent
     public void init(String role, int width, int height, int playclock) {
 		this.role = role;
 		this.playclock = playclock;
+		this.maxTime = playclock * 1000;
 		myTurn = !role.equals("white");
 		start = System.currentTimeMillis();  
-        board = new Board(width, height);
+		board = new Board(width, height);
+		numMoves = 0;
 		if(role.equals("white")) {
 			board.setWhiteTurn(true);
 			board.setWhiteAsMax(true);
 		}
 		else {
+			//So that when playing as black, we don't lose on purpose
+			//Happened in testing a few times. Was rather amusing.
 			board.setWhiteAsMax(false);
 			board.setWhiteTurn(false);
 		}
@@ -41,24 +48,15 @@ public class NewAgent implements Agent
     		} else {
     			roleOfLastPlayer = "black";
     		}
-            
-			System.out.println("====================");
             System.out.println(roleOfLastPlayer + " moved from " + x1 + "," + y1 + " to " + x2 + "," + y2);
             board.MovePawn(x1, y1, x2, y2);
-			System.out.println("Board score: " + board.Score());
-			board.PrintDetailedScore();
-            // board.print();
+            numMoves++;
     	}
 		
     	// update turn (above that line it myTurn is still for the previous state)
 		myTurn = !myTurn;
 		if (myTurn) {
-			// ArrayList<LegalState> s = board.GetLegalMoves();
-			// for (LegalState var : s) {
-			// 	System.out.println(var.x1 + " " + var.y2 + " " + var.x2 + " " + var.y2);
-			// }
-			// System.exit(0);
-			AlphaBetaSolver solver = new AlphaBetaSolver(10, board);
+			AlphaBetaSolver solver = new AlphaBetaSolver(maxDepth, board, maxTime);
 			solver.Solve();
 			int bestNextState = solver.GetIndexofBestMove();
 			
@@ -73,8 +71,9 @@ public class NewAgent implements Agent
 	// is called when the game is over or the match is aborted
 	@Override
 	public void cleanup() {
-		//Not really needed? Init function takes care of this.
 		long elapsedTime = System.currentTimeMillis() - start;
 		System.out.println("Time taken: " + elapsedTime + "ms");
+		System.out.println("Number of turns: " + numMoves);
+		System.out.println("Time limit: " + this.playclock);
 	}
 }
