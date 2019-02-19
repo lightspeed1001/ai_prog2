@@ -1,5 +1,3 @@
-import javax.sound.midi.SysexMessage;
-
 public class NewAgent implements Agent
 {
 	private String role; // the name of this agent's role (white or black)
